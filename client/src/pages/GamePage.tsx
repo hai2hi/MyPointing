@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import Modal from '../components/Modal'
 import { useParams, Link, useNavigate, useBlocker } from 'react-router-dom'
 import { PATHS } from '../constants/paths'
@@ -14,14 +14,25 @@ function GamePage() {
     const gameName = localStorage.getItem(`game_${gameId}`) || 'Planning Session'
     const username = localStorage.getItem('currentUser')
     const userId = localStorage.getItem('userId') || Math.random().toString(36).substring(2, 9)
-    const { sendTest, roomState, resetVotes, revealVotes, joinRoom, isConnected, deleteRoom } = useSocket()
+    const { sendTest, roomState, submitVote, resetVotes, revealVotes, joinRoom, isConnected, deleteRoom } = useSocket()
     const hasJoined = useRef(false)
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+
+    // Find current user's vote
+    const currentUser = roomState?.participants.find(p => p.userId === userId)
+    const currentVote = currentUser?.vote
+
+    const handleVote = useCallback((value: string | number) => {
+        if (gameId && userId) {
+            submitVote(gameId, userId, value)
+        }
+    }, [gameId, userId, submitVote])
 
     // Block navigation if connected to a game
     const blocker = useBlocker(
         ({ currentLocation, nextLocation }) =>
             isConnected &&
+            !!roomState &&
             currentLocation.pathname !== nextLocation.pathname
     );
 
@@ -49,6 +60,7 @@ function GamePage() {
         }
     }, [gameId, userId, username, joinRoom, isConnected, navigate])
 
+    const isAdmin = roomState?.participants.find(p => p.userId === userId)?.isAdmin
     return (
         <div className="app-container">
             <header className="header">
@@ -73,14 +85,19 @@ function GamePage() {
 
                             <div className="board-container">
                                 {VOTING_OPTIONS.map(option => (
-                                    <VotingCard key={option} value={option} />
+                                    <VotingCard
+                                        key={option}
+                                        value={option.toString()}
+                                        isActive={currentVote?.toString() === option.toString()}
+                                        onVote={handleVote}
+                                    />
                                 ))}
                             </div>
 
                             <div className="admin-controls mt-16 flex gap-4">
                                 <button type="button" className="btn-primary" onClick={() => { revealVotes(gameId!); sendTest(); }}>Show Cards</button>
                                 <button type="button" className="btn-outline" onClick={() => resetVotes(gameId!)}>Clear Board</button>
-                                {roomState?.participants.find(p => p.userId === userId)?.isAdmin && (
+                                {isAdmin && (
                                     <button type="button" className="btn-outline btn-danger" onClick={() => setShowDeleteConfirmation(true)}>Delete Room</button>
                                 )}
                             </div>
