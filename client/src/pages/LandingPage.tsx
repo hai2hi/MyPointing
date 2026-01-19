@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { PATHS } from '../constants/paths'
 import '../css/App.css'
 
-import Header from '../components/Header'
-
 function LandingPage() {
   const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -31,8 +29,6 @@ function LandingPage() {
 
   return (
     <div className="app-container">
-      <Header />
-
       <main>
         <section id='start-new' className="section hero">
           <div className="container">

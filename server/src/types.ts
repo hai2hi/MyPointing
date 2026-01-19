@@ -29,6 +29,7 @@ export interface ClientToServerEvents {
     revealVotes: (roomId: string) => void;
     resetVotes: (roomId: string) => void;
     deleteRoom: (roomId: string) => void;
+    leaveRoom: (roomId: string, userId: string) => void;
     test: () => void;
 }
 

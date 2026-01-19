@@ -1,20 +1,27 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Modal from '../components/Modal'
-import { useParams, Link, useNavigate, useBlocker } from 'react-router-dom'
+import { useParams, useNavigate, useBlocker } from 'react-router-dom'
 import { PATHS } from '../constants/paths'
 import VotingCard from '../components/VotingCard'
 import Participants from '../components/Participants'
 import { useSocket } from '../hooks/useSocket'
 import { VOTING_OPTIONS } from '../constants/voting'
+import VoteChart from '../components/VoteChart'
 import '../css/App.css'
 
 function GamePage() {
     const { gameId } = useParams<{ gameId: string }>()
     const navigate = useNavigate()
-    const gameName = localStorage.getItem(`game_${gameId}`) || 'Planning Session'
+    const gameName = localStorage.getItem(`game_${gameId} `) || 'Planning Session'
     const username = localStorage.getItem('currentUser')
-    const userId = localStorage.getItem('userId') || Math.random().toString(36).substring(2, 9)
-    const { sendTest, roomState, submitVote, resetVotes, revealVotes, joinRoom, isConnected, deleteRoom } = useSocket()
+    const [userId] = useState(() => {
+        const stored = localStorage.getItem('userId')
+        if (stored) return stored
+        const newId = Math.random().toString(36).substring(2, 9)
+        localStorage.setItem('userId', newId)
+        return newId
+    })
+    const { roomState, submitVote, resetVotes, revealVotes, joinRoom, isConnected, deleteRoom, leaveRoom } = useSocket()
     const hasJoined = useRef(false)
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
 
@@ -51,20 +58,21 @@ function GamePage() {
             joinRoom(gameId, userId, username)
             hasJoined.current = true
             // Save as last active game
-            localStorage.setItem('lastGameId', gameId)
+            sessionStorage.setItem('lastGameId', gameId)
         }
 
         return () => {
-            // Optional: reset if we want to allow re-joining on remount
-            // hasJoined.current = false 
+            if (gameId && userId && hasJoined.current) {
+                leaveRoom(gameId, userId)
+                hasJoined.current = false
+            }
         }
-    }, [gameId, userId, username, joinRoom, isConnected, navigate])
+    }, [gameId, userId, username, joinRoom, isConnected, navigate, leaveRoom])
 
     const isAdmin = roomState?.participants.find(p => p.userId === userId)?.isAdmin
     return (
         <div className="app-container">
-            <header className="header">
-                <Link to={PATHS.HOME} className="logo-text">MyPointing</Link>
+            <div className="room-info-bar">
                 <div className="room-info-box">
                     <div className="text-bold text-lg">{gameName}</div>
                     <div className="text-sm text-dim">ID: {gameId}</div>
@@ -72,7 +80,7 @@ function GamePage() {
                 <nav className="nav-links">
                     <button type="button" className="btn-outline">Invite</button>
                 </nav>
-            </header>
+            </div>
 
             <main className="section game-page-main">
                 <div className="container">
@@ -83,19 +91,23 @@ function GamePage() {
                                 <div className="text-xl text-semibold text-dim-extra">Round {roomState?.round || 1}</div>
                             </div>
 
-                            <div className="board-container">
-                                {VOTING_OPTIONS.map(option => (
-                                    <VotingCard
-                                        key={option}
-                                        value={option.toString()}
-                                        isActive={currentVote?.toString() === option.toString()}
-                                        onVote={handleVote}
-                                    />
-                                ))}
-                            </div>
+                            {roomState?.votesVisible ? (
+                                <VoteChart participants={roomState.participants} />
+                            ) : (
+                                <div className="board-container">
+                                    {VOTING_OPTIONS.map(option => (
+                                        <VotingCard
+                                            key={option}
+                                            value={option.toString()}
+                                            isActive={currentVote?.toString() === option.toString()}
+                                            onVote={handleVote}
+                                        />
+                                    ))}
+                                </div>
+                            )}
 
                             <div className="admin-controls mt-16 flex gap-4">
-                                <button type="button" className="btn-primary" onClick={() => { revealVotes(gameId!); sendTest(); }}>Show Cards</button>
+                                <button type="button" className="btn-primary" onClick={() => revealVotes(gameId!)}>Show Cards</button>
                                 <button type="button" className="btn-outline" onClick={() => resetVotes(gameId!)}>Clear Board</button>
                                 {isAdmin && (
                                     <button type="button" className="btn-outline btn-danger" onClick={() => setShowDeleteConfirmation(true)}>Delete Room</button>

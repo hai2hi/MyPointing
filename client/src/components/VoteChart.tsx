@@ -1,0 +1,109 @@
+import React from 'react';
+import type { Participant } from '../types/socket';
+
+interface VoteChartProps {
+    participants: Participant[];
+}
+
+const COLORS = [
+    '#6366f1', // Indigo
+    '#8b5cf6', // Violet
+    '#ec4899', // Pink
+    '#f43f5e', // Rose
+    '#f59e0b', // Amber
+    '#10b981', // Emerald
+    '#0ea5e9', // Sky
+    '#64748b', // Slate
+];
+
+const VoteChart: React.FC<VoteChartProps> = ({ participants }) => {
+    const votedParticipants = participants.filter(p => p.hasVoted && p.vote !== null);
+
+    if (votedParticipants.length === 0) {
+        return (
+            <div className="flex-col-center gap-4 py-8">
+                <div className="text-xl text-dim">No votes cast yet</div>
+            </div>
+        );
+    }
+
+    // Group votes
+    const voteCounts: Record<string, number> = {};
+    votedParticipants.forEach(p => {
+        const val = p.vote!.toString();
+        voteCounts[val] = (voteCounts[val] || 0) + 1;
+    });
+
+    const totalVotes = votedParticipants.length;
+    const entries = Object.entries(voteCounts).sort((a, b) => {
+        // Sort by value (numeric if possible)
+        const valA = isNaN(Number(a[0])) ? Infinity : Number(a[0]);
+        const valB = isNaN(Number(b[0])) ? Infinity : Number(b[0]);
+        return valA - valB;
+    });
+
+    // Pie chart logic
+    let cumulativePercent = 0;
+
+    const getCoordinatesForPercent = (percent: number) => {
+        const x = Math.cos(2 * Math.PI * percent);
+        const y = Math.sin(2 * Math.PI * percent);
+        return [x, y];
+    };
+
+    return (
+        <div className="vote-chart-container">
+            <div className="chart-svg-wrapper">
+                <svg viewBox="-1 -1 2 2" className="pie-chart-svg">
+                    {entries.map(([value, count], index) => {
+                        const percent = count / totalVotes;
+                        const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
+
+                        cumulativePercent += percent;
+
+                        const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
+                        const largeArcFlag = percent > 0.5 ? 1 : 0;
+                        const pathData = [
+                            `M ${startX} ${startY}`,
+                            `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+                            `L 0 0`,
+                        ].join(' ');
+
+                        return (
+                            <path
+                                key={value}
+                                d={pathData}
+                                fill={COLORS[index % COLORS.length]}
+                                className="chart-slice"
+                            />
+                        );
+                    })}
+                </svg>
+                <div className="chart-center-overlay">
+                    <span className="text-2xl text-bold">{totalVotes}</span>
+                    <span className="text-sm text-dim">Votes</span>
+                </div>
+            </div>
+
+            <div className="chart-legend">
+                {entries.map(([value, count], index) => (
+                    <div key={value} className="legend-item">
+                        <div
+                            className="legend-color"
+                            style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        />
+                        <div className="legend-info">
+                            <span className="legend-value">{value}</span>
+                            <span className="legend-count">{count} {count === 1 ? 'vote' : 'votes'}</span>
+                        </div>
+                        <div className="legend-percent">
+                            {Math.round((count / totalVotes) * 100)}%
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default VoteChart;

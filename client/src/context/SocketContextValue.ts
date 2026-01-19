@@ -9,6 +9,7 @@ export interface SocketContextType {
     revealVotes: (roomId: string) => void;
     resetVotes: (roomId: string) => void;
     deleteRoom: (roomId: string) => void;
+    leaveRoom: (roomId: string, userId: string) => void;
     sendTest: () => void;
     checkConnection: () => boolean;
 }

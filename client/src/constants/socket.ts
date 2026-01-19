@@ -7,7 +7,8 @@ export const SOCKET_EVENTS = {
     TEST: 'test',
     ERROR: 'error',
     DELETE_ROOM: 'deleteRoom',
-    ROOM_DELETED: 'roomDeleted'
+    ROOM_DELETED: 'roomDeleted',
+    LEAVE_ROOM: 'leaveRoom'
 } as const;
 
 export const ROOM_DELETION_REASONS = {

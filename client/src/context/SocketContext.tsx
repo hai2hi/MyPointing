@@ -29,14 +29,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         function onRoomUpdated(state: RoomState) {
             setRoomState(state);
-            localStorage.setItem('lastGameRound', state.round.toString());
+            sessionStorage.setItem('lastGameRound', state.round.toString());
         }
 
         function onRoomDeleted(reason: string) {
             setDeletionReason(reason || ROOM_DELETION_REASONS.MANUAL);
             setRoomState(null);
-            localStorage.removeItem('lastGameId');
-            localStorage.removeItem('lastGameRound');
+            sessionStorage.removeItem('lastGameId');
+            sessionStorage.removeItem('lastGameRound');
+            navigate(PATHS.NEW_SESSION);
         }
 
         function onError(message: string) {
@@ -95,7 +96,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const deleteRoom = useCallback((roomId: string) => {
         if (checkConnection()) {
-            socket.emit(SOCKET_EVENTS.DELETE_ROOM, roomId);
+            if (window.confirm('Are you sure you want to delete this room? This will remove all participants.')) {
+                socket.emit(SOCKET_EVENTS.DELETE_ROOM, roomId);
+            }
+        }
+    }, [checkConnection]);
+
+    const leaveRoom = useCallback((roomId: string, userId: string) => {
+        if (checkConnection()) {
+            socket.emit(SOCKET_EVENTS.LEAVE_ROOM, roomId, userId);
         }
     }, [checkConnection]);
 
@@ -114,6 +123,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             revealVotes,
             resetVotes,
             deleteRoom,
+            leaveRoom,
             sendTest,
             checkConnection
         }}>
