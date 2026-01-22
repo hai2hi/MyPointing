@@ -4,8 +4,6 @@ import { PATHS } from '../constants/paths'
 import { useSocket } from '../hooks/useSocket'
 import '../css/App.css'
 
-import Header from '../components/Header'
-
 function NewSessionPage() {
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
@@ -43,8 +41,6 @@ function NewSessionPage() {
 
     return (
         <div className="app-container">
-            <Header />
-
             <main>
                 <section className="section">
                     <div className="container max-w-600 text-left">
