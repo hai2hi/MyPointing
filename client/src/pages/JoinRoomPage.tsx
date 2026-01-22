@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { PATHS } from '../constants/paths'
 import '../css/App.css'
 
-import Header from '../components/Header'
 
 function JoinRoomPage() {
     const { gameId } = useParams<{ gameId: string }>()
@@ -36,8 +35,6 @@ function JoinRoomPage() {
 
     return (
         <div className="app-container">
-            <Header />
-
             <main className="section">
                 <div className="container max-w-600 text-left">
                     <h1 className="section-title">Join Room</h1>

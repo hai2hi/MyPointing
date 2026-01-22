@@ -1,4 +1,4 @@
-export type VoteValue = 0 | 1 | 2 | 3 | 5 | 8 | 13 | 21 | '?';
+export type VoteValue = 0 | 1 | 2 | 3 | 5 | 8 | 13 | 21 | '?' | null;
 
 export interface Participant {
     userId: string;
@@ -9,11 +9,23 @@ export interface Participant {
     hasVoted: boolean;
 }
 
+export interface RoundResult {
+    round: number;
+    title: string;
+    votes: {
+        userId: string;
+        displayName: string;
+        vote: VoteValue;
+    }[];
+}
+
 export interface RoomState {
     roomId: string;
     participants: Participant[];
     votesVisible: boolean;
     round: number;
+    title: string;
+    history: RoundResult[];
 }
 
 export interface ServerToClientEvents {
@@ -29,6 +41,8 @@ export interface ClientToServerEvents {
     revealVotes: (roomId: string) => void;
     resetVotes: (roomId: string) => void;
     deleteRoom: (roomId: string) => void;
+    leaveRoom: (roomId: string, userId: string) => void;
+    updateTitle: (roomId: string, title: string) => void;
     test: () => void;
 }
 

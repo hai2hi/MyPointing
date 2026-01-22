@@ -4,6 +4,7 @@ import {
     type ServerToClientEvents,
     type RoomState,
     type VoteValue,
+    type RoundResult,
     type SocketData
 } from './types.js';
 import { SOCKET_EVENTS, ROOM_DELETION_REASONS } from './constants.js';
@@ -16,15 +17,36 @@ const TOMBSTONE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 const ROOM_DELETION_GRACE_PERIOD = 1 * 60 * 1000; // 5 minutes
 
-// Helper to get sanitized room state (hiding votes if not revealed)
-export const getSanitizedRoomState = (room: RoomState): RoomState => {
+// Helper to get sanitized room state (hiding votes if not revealed, except for the user themselves)
+export const getSanitizedRoomState = (room: RoomState, perspectiveUserId?: string): RoomState => {
     return {
         ...room,
         participants: room.participants.map(p => ({
             ...p,
-            vote: room.votesVisible ? p.vote : null,
+            vote: (room.votesVisible || p.userId === perspectiveUserId) ? p.vote : null,
         })),
     };
+};
+
+// Helper to broadcast personalized room state to all connected participants
+const broadcastRoomState = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string
+) => {
+    const room = rooms[roomId];
+    if (!room) return;
+
+    // Get all sockets in the room
+    const sockets = io.sockets.adapter.rooms.get(roomId);
+    if (!sockets) return;
+
+    sockets.forEach(socketId => {
+        const socket = io.sockets.sockets.get(socketId);
+        if (socket) {
+            const userId = socket.data.userId;
+            socket.emit(SOCKET_EVENTS.ROOM_UPDATED, getSanitizedRoomState(room, userId));
+        }
+    });
 };
 
 const clearDeletionTimer = (roomId: string) => {
@@ -77,6 +99,11 @@ export const handleJoinRoom = (
     userId: string,
     displayName: string
 ) => {
+    // If the socket is already in a different room, leave it first
+    if (socket.data.roomId && socket.data.roomId !== roomId) {
+        handleLeaveRoom(io, socket, socket.data.roomId, userId);
+    }
+
     socket.join(roomId);
 
     // Check if room was recently deleted
@@ -91,6 +118,8 @@ export const handleJoinRoom = (
             participants: [],
             votesVisible: false,
             round: 1,
+            title: '',
+            history: [],
         };
     }
 
@@ -122,7 +151,7 @@ export const handleJoinRoom = (
     }
 
     const activeCount = room.participants.filter(p => p.isConnected).length;
-    if (existingParticipant) {
+    if (existingParticipant && !deletedRooms.has(roomId)) {
         console.log(`User ${displayName} (${userId}) reconnected to ${roomId} (Round ${room.round}). Active: ${activeCount}`);
     } else {
         console.log(`User ${displayName} (${userId}) joined room ${roomId} (Round ${room.round}). Active: ${activeCount}`);
@@ -132,7 +161,7 @@ export const handleJoinRoom = (
     socket.data.userId = userId;
     socket.data.roomId = roomId;
 
-    io.to(roomId).emit(SOCKET_EVENTS.ROOM_UPDATED, getSanitizedRoomState(room));
+    broadcastRoomState(io, roomId);
 };
 
 export const handleSubmitVote = (
@@ -152,11 +181,32 @@ export const handleSubmitVote = (
     const participant = room.participants.find(p => p.userId === userId);
     if (!participant) return;
 
-    participant.vote = vote;
-    participant.hasVoted = true;
+    // Toggle logic: if the same vote is submitted, clear it (deselect)
+    const newVote = participant.vote === vote ? null : vote;
+    participant.vote = newVote;
+    participant.hasVoted = newVote !== null;
 
-    io.to(roomId).emit(SOCKET_EVENTS.ROOM_UPDATED, getSanitizedRoomState(room));
+    broadcastRoomState(io, roomId);
     console.log(`User ${userId} voted ${vote} in room ${roomId}`);
+};
+
+export const handleUpdateTitle = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string,
+    title: string
+) => {
+    const room = rooms[roomId];
+    if (!room) {
+        notifyIfRoomDeleted(socket, roomId);
+        console.log(`Room not found: ${roomId}`);
+        return;
+    }
+
+    room.title = title;
+    broadcastRoomState(io, roomId);
+    const userId = socket.data.userId;
+    console.log(`User ${userId} updated title to "${title}" in room ${roomId}`);
 };
 
 export const handleRevealVotes = (
@@ -172,7 +222,7 @@ export const handleRevealVotes = (
     }
 
     room.votesVisible = true;
-    io.to(roomId).emit(SOCKET_EVENTS.ROOM_UPDATED, room); // Full state on reveal
+    broadcastRoomState(io, roomId);
     console.log(`Votes revealed in room ${roomId}`);
 };
 
@@ -188,8 +238,23 @@ export const handleResetVotes = (
         return;
     }
 
+    // Save current round to history before resetting
+    const result: RoundResult = {
+        round: room.round,
+        title: room.title,
+        votes: room.participants
+            .filter(p => p.hasVoted && p.vote !== null)
+            .map(p => ({
+                userId: p.userId,
+                displayName: p.displayName,
+                vote: p.vote!
+            }))
+    };
+    room.history.push(result);
+
     room.votesVisible = false;
     room.round += 1;
+    room.title = '';
     room.participants.forEach(p => {
         p.vote = null;
         p.hasVoted = false;
@@ -198,7 +263,7 @@ export const handleResetVotes = (
     // Reset test counter for the next round
     testCounter = 0;
 
-    io.to(roomId).emit(SOCKET_EVENTS.ROOM_UPDATED, getSanitizedRoomState(room));
+    broadcastRoomState(io, roomId);
     console.log(`Votes reset in room ${roomId}`);
 };
 
@@ -244,29 +309,61 @@ export const handleDisconnect = (
         const participant = room.participants.find(p => p.userId === userId);
         if (participant) {
             participant.isConnected = false;
-        }
+            const allOffline = room.participants.every(p => !p.isConnected);
 
-        const allOffline = room.participants.every(p => !p.isConnected);
+            if (allOffline) {
+                console.log(`All participants offline in room ${roomId}. Starting ${ROOM_DELETION_GRACE_PERIOD / 1000 / 60}m deletion timer.`);
 
-        if (allOffline) {
-            console.log(`All participants offline in room ${roomId}. Starting ${ROOM_DELETION_GRACE_PERIOD / 1000 / 60}m deletion timer.`);
+                // Clear existing timeout if any
+                clearDeletionTimer(roomId);
 
-            // Clear existing timeout if any
-            clearDeletionTimer(roomId);
-
-            roomDeletionTimeouts[roomId] = setTimeout(() => {
-                const room = rooms[roomId];
-                if (room) {
-                    deleteRoom(io, roomId, ROOM_DELETION_REASONS.INACTIVITY);
-                    console.log(`Room ${roomId} deleted after grace period`);
-                }
-            }, ROOM_DELETION_GRACE_PERIOD);
-        } else {
-            const activeCount = room.participants.filter(p => p.isConnected).length;
-            console.log(`User ${userId} disconnected from ${roomId}. Active: ${activeCount}`);
-            io.to(roomId).emit(SOCKET_EVENTS.ROOM_UPDATED, getSanitizedRoomState(room));
+                roomDeletionTimeouts[roomId] = setTimeout(() => {
+                    const room = rooms[roomId];
+                    if (room) {
+                        deleteRoom(io, roomId, ROOM_DELETION_REASONS.INACTIVITY);
+                        console.log(`Room ${roomId} deleted after grace period`);
+                    }
+                }, ROOM_DELETION_GRACE_PERIOD);
+            } else {
+                const activeCount = room.participants.filter(p => p.isConnected).length;
+                console.log(`User ${userId} disconnected from ${roomId}. Active: ${activeCount}`);
+                broadcastRoomState(io, roomId);
+            }
         }
     }
+};
+
+export const handleLeaveRoom = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string,
+    userId: string
+) => {
+    const room = rooms[roomId];
+    if (!room) return;
+
+    const participant = room.participants.find(p => p.userId === userId);
+    if (participant) {
+        participant.isConnected = false;
+        console.log(`User ${participant.displayName} (${userId}) logically left room ${roomId}`);
+    }
+
+    const allOffline = room.participants.every(p => !p.isConnected);
+    if (allOffline) {
+        console.log(`All participants offline in room ${roomId} after logical leave. Starting ${ROOM_DELETION_GRACE_PERIOD / 1000 / 60}m deletion timer.`);
+
+        clearDeletionTimer(roomId);
+        roomDeletionTimeouts[roomId] = setTimeout(() => {
+            const r = rooms[roomId];
+            if (r) {
+                deleteRoom(io, roomId, ROOM_DELETION_REASONS.INACTIVITY);
+            }
+        }, ROOM_DELETION_GRACE_PERIOD);
+    } else {
+        broadcastRoomState(io, roomId);
+    }
+
+    socket.leave(roomId);
 };
 
 let testCounter = 0;

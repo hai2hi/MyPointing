@@ -25,7 +25,10 @@ function Participants({ participants, currentUserId, username }: ParticipantsPro
                                 }
                             </div>
                             <span className="text-sm text-italic">
-                                {p.isConnected ? (p.hasVoted ? 'Voted' : 'Voting...') : 'Offline'}
+                                {p.isConnected
+                                    ? (p.vote !== null ? p.vote : (p.hasVoted ? 'Voted' : 'Voting...'))
+                                    : 'Offline'
+                                }
                             </span>
                         </div>
                     ))
