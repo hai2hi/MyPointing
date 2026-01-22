@@ -24,7 +24,9 @@ app.use(cors());
 const httpServer = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {
     cors: {
-        origin: '*',
+        origin: process.env.CLIENT_URL || '*',
+        methods: ['GET', 'POST'],
+        credentials: true
     },
     transports: ['websocket']
 });
