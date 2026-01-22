@@ -8,7 +8,6 @@ interface VotingCardProps {
 }
 
 const VotingCard = React.memo(({ value, isActive, onVote }: VotingCardProps) => {
-    console.log(isActive);
 
     return (
         <div

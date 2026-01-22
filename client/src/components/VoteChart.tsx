@@ -3,6 +3,7 @@ import type { Participant } from '../types/socket';
 
 interface VoteChartProps {
     participants: Participant[];
+    title?: string;
 }
 
 const COLORS = [
@@ -16,7 +17,7 @@ const COLORS = [
     '#64748b', // Slate
 ];
 
-const VoteChart: React.FC<VoteChartProps> = ({ participants }) => {
+const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
     const votedParticipants = participants.filter(p => p.hasVoted && p.vote !== null);
 
     if (votedParticipants.length === 0) {
@@ -52,55 +53,62 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants }) => {
     };
 
     return (
-        <div className="vote-chart-container">
-            <div className="chart-svg-wrapper">
-                <svg viewBox="-1 -1 2 2" className="pie-chart-svg">
-                    {entries.map(([value, count], index) => {
-                        const percent = count / totalVotes;
-                        const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
-
-                        cumulativePercent += percent;
-
-                        const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
-                        const largeArcFlag = percent > 0.5 ? 1 : 0;
-                        const pathData = [
-                            `M ${startX} ${startY}`,
-                            `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
-                            `L 0 0`,
-                        ].join(' ');
-
-                        return (
-                            <path
-                                key={value}
-                                d={pathData}
-                                fill={COLORS[index % COLORS.length]}
-                                className="chart-slice"
-                            />
-                        );
-                    })}
-                </svg>
-                <div className="chart-center-overlay">
-                    <span className="text-2xl text-bold">{totalVotes}</span>
-                    <span className="text-sm text-dim">Votes</span>
+        <div className="vote-chart-container flex-col-center">
+            {title && (
+                <div className="chart-title mb-8">
+                    <h2 className="text-2xl text-bold">{title}</h2>
                 </div>
-            </div>
+            )}
+            <div className="flex-center gap-16 w-full chart-content-wrapper">
+                <div className="chart-svg-wrapper">
+                    <svg viewBox="-1 -1 2 2" className="pie-chart-svg">
+                        {entries.map(([value, count], index) => {
+                            const percent = count / totalVotes;
+                            const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
 
-            <div className="chart-legend">
-                {entries.map(([value, count], index) => (
-                    <div key={value} className="legend-item">
-                        <div
-                            className="legend-color"
-                            style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                        />
-                        <div className="legend-info">
-                            <span className="legend-value">{value}</span>
-                            <span className="legend-count">{count} {count === 1 ? 'vote' : 'votes'}</span>
-                        </div>
-                        <div className="legend-percent">
-                            {Math.round((count / totalVotes) * 100)}%
-                        </div>
+                            cumulativePercent += percent;
+
+                            const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
+                            const largeArcFlag = percent > 0.5 ? 1 : 0;
+                            const pathData = [
+                                `M ${startX} ${startY}`,
+                                `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+                                `L 0 0`,
+                            ].join(' ');
+
+                            return (
+                                <path
+                                    key={value}
+                                    d={pathData}
+                                    fill={COLORS[index % COLORS.length]}
+                                    className="chart-slice"
+                                />
+                            );
+                        })}
+                    </svg>
+                    <div className="chart-center-overlay">
+                        <span className="text-2xl text-bold">{totalVotes}</span>
+                        <span className="text-sm text-dim">Votes</span>
                     </div>
-                ))}
+                </div>
+
+                <div className="chart-legend">
+                    {entries.map(([value, count], index) => (
+                        <div key={value} className="legend-item">
+                            <div
+                                className="legend-color"
+                                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                            />
+                            <div className="legend-info">
+                                <span className="legend-value">{value}</span>
+                                <span className="legend-count">{count} {count === 1 ? 'vote' : 'votes'}</span>
+                            </div>
+                            <div className="legend-percent">
+                                {Math.round((count / totalVotes) * 100)}%
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

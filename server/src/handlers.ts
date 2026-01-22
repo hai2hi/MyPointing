@@ -4,6 +4,7 @@ import {
     type ServerToClientEvents,
     type RoomState,
     type VoteValue,
+    type RoundResult,
     type SocketData
 } from './types.js';
 import { SOCKET_EVENTS, ROOM_DELETION_REASONS } from './constants.js';
@@ -98,6 +99,11 @@ export const handleJoinRoom = (
     userId: string,
     displayName: string
 ) => {
+    // If the socket is already in a different room, leave it first
+    if (socket.data.roomId && socket.data.roomId !== roomId) {
+        handleLeaveRoom(io, socket, socket.data.roomId, userId);
+    }
+
     socket.join(roomId);
 
     // Check if room was recently deleted
@@ -112,6 +118,8 @@ export const handleJoinRoom = (
             participants: [],
             votesVisible: false,
             round: 1,
+            title: '',
+            history: [],
         };
     }
 
@@ -173,11 +181,32 @@ export const handleSubmitVote = (
     const participant = room.participants.find(p => p.userId === userId);
     if (!participant) return;
 
-    participant.vote = vote;
-    participant.hasVoted = true;
+    // Toggle logic: if the same vote is submitted, clear it (deselect)
+    const newVote = participant.vote === vote ? null : vote;
+    participant.vote = newVote;
+    participant.hasVoted = newVote !== null;
 
     broadcastRoomState(io, roomId);
     console.log(`User ${userId} voted ${vote} in room ${roomId}`);
+};
+
+export const handleUpdateTitle = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string,
+    title: string
+) => {
+    const room = rooms[roomId];
+    if (!room) {
+        notifyIfRoomDeleted(socket, roomId);
+        console.log(`Room not found: ${roomId}`);
+        return;
+    }
+
+    room.title = title;
+    broadcastRoomState(io, roomId);
+    const userId = socket.data.userId;
+    console.log(`User ${userId} updated title to "${title}" in room ${roomId}`);
 };
 
 export const handleRevealVotes = (
@@ -209,8 +238,23 @@ export const handleResetVotes = (
         return;
     }
 
+    // Save current round to history before resetting
+    const result: RoundResult = {
+        round: room.round,
+        title: room.title,
+        votes: room.participants
+            .filter(p => p.hasVoted && p.vote !== null)
+            .map(p => ({
+                userId: p.userId,
+                displayName: p.displayName,
+                vote: p.vote!
+            }))
+    };
+    room.history.push(result);
+
     room.votesVisible = false;
     room.round += 1;
+    room.title = '';
     room.participants.forEach(p => {
         p.vote = null;
         p.hasVoted = false;

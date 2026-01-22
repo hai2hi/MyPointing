@@ -4,7 +4,7 @@ import { socket } from '../socket';
 import { SOCKET_EVENTS } from '../constants/socket';
 import { PATHS } from '../constants/paths';
 import type { RoomState } from '../types/socket';
-import { SocketContext } from './SocketContextValue';
+import { SocketStateContext, SocketActionsContext } from './SocketContextValue';
 import Modal from '../components/Modal';
 import { DELETION_MESSAGES, ROOM_DELETION_REASONS } from '../constants/socket';
 
@@ -96,9 +96,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const deleteRoom = useCallback((roomId: string) => {
         if (checkConnection()) {
-            if (window.confirm('Are you sure you want to delete this room? This will remove all participants.')) {
-                socket.emit(SOCKET_EVENTS.DELETE_ROOM, roomId);
-            }
+            socket.emit(SOCKET_EVENTS.DELETE_ROOM, roomId);
         }
     }, [checkConnection]);
 
@@ -108,71 +106,95 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     }, [checkConnection]);
 
+    const updateTitle = useCallback((roomId: string, title: string) => {
+        if (checkConnection()) {
+            socket.emit(SOCKET_EVENTS.UPDATE_TITLE, roomId, title);
+        }
+    }, [checkConnection]);
+
     const sendTest = useCallback(() => {
         if (checkConnection()) {
             socket.emit(SOCKET_EVENTS.TEST);
         }
     }, [checkConnection]);
 
+    const stateValue = React.useMemo(() => ({
+        roomState,
+        isConnected
+    }), [roomState, isConnected]);
+
+    const actionsValue = React.useMemo(() => ({
+        joinRoom,
+        submitVote,
+        revealVotes,
+        resetVotes,
+        deleteRoom,
+        leaveRoom,
+        updateTitle,
+        sendTest,
+        checkConnection
+    }), [
+        joinRoom,
+        submitVote,
+        revealVotes,
+        resetVotes,
+        deleteRoom,
+        leaveRoom,
+        updateTitle,
+        sendTest,
+        checkConnection
+    ]);
+
     return (
-        <SocketContext.Provider value={{
-            roomState,
-            isConnected,
-            joinRoom,
-            submitVote,
-            revealVotes,
-            resetVotes,
-            deleteRoom,
-            leaveRoom,
-            sendTest,
-            checkConnection
-        }}>
-            {children}
+        <SocketStateContext.Provider value={stateValue}>
+            <SocketActionsContext.Provider value={actionsValue}>
+                {children}
 
-            {showErrorModal && (
-                <Modal
-                    isOpen={showErrorModal}
-                    title="Connection Error"
-                    onClose={() => setShowErrorModal(false)}
-                    actions={
-                        <button
-                            type="button"
-                            className="btn-primary w-full"
-                            onClick={() => setShowErrorModal(false)}
-                        >
-                            OK
-                        </button>
-                    }
-                >
-                    <p>We're having trouble connecting to the server.</p>
-                </Modal>
-            )}
+                {showErrorModal && (
+                    <Modal
+                        isOpen={showErrorModal}
+                        title="Connection Error"
+                        onClose={() => setShowErrorModal(false)}
+                        actions={
+                            <button
+                                type="button"
+                                className="btn-primary w-full"
+                                onClick={() => setShowErrorModal(false)}
+                            >
+                                OK
+                            </button>
+                        }
+                    >
+                        <p>We're having trouble connecting to the server.</p>
+                    </Modal>
+                )}
 
-            {deletionReason && (
-                <Modal
-                    isOpen={!!deletionReason}
-                    title="Room Deleted"
-                    onClose={() => {
-                        setDeletionReason(null);
-                        navigate(PATHS.NEW_SESSION);
-                    }}
-                    actions={
-                        <button
-                            type="button"
-                            className="btn-primary w-full"
-                            onClick={() => {
-                                setDeletionReason(null);
-                                navigate(PATHS.NEW_SESSION);
-                            }}
-                        >
-                            OK
-                        </button>
-                    }
-                >
-                    <p>{DELETION_MESSAGES[deletionReason as keyof typeof DELETION_MESSAGES] || 'The room was deleted.'}</p>
-                </Modal>
-            )}
-        </SocketContext.Provider>
+                {deletionReason && (
+                    <Modal
+                        isOpen={!!deletionReason}
+                        title="Room Deleted"
+                        onClose={() => {
+                            setDeletionReason(null);
+                            navigate(PATHS.NEW_SESSION);
+                        }}
+                        actions={
+                            <button
+                                type="button"
+                                className="btn-primary w-full"
+                                onClick={() => {
+                                    setDeletionReason(null);
+                                    navigate(PATHS.NEW_SESSION);
+                                }}
+                            >
+                                OK
+                            </button>
+                        }
+                    >
+                        <p>{DELETION_MESSAGES[deletionReason as keyof typeof DELETION_MESSAGES] || 'The room was deleted.'}</p>
+                    </Modal>
+                )}
+            </SocketActionsContext.Provider>
+        </SocketStateContext.Provider>
     );
 };
 

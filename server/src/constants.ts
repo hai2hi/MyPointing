@@ -12,6 +12,7 @@ export const SOCKET_EVENTS = {
     DELETE_ROOM: 'deleteRoom',
     ROOM_DELETED: 'roomDeleted',
     LEAVE_ROOM: 'leaveRoom',
+    UPDATE_TITLE: 'updateTitle',
     ERROR: 'error',
 } as const;
 

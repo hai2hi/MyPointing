@@ -4,15 +4,16 @@ import { useParams, useNavigate, useBlocker } from 'react-router-dom'
 import { PATHS } from '../constants/paths'
 import VotingCard from '../components/VotingCard'
 import Participants from '../components/Participants'
-import { useSocket } from '../hooks/useSocket'
+import { useSocketState, useSocketActions } from '../hooks/useSocket'
 import { VOTING_OPTIONS } from '../constants/voting'
 import VoteChart from '../components/VoteChart'
+import RoundTitle from '../components/RoundTitle'
 import '../css/App.css'
 
 function GamePage() {
     const { gameId } = useParams<{ gameId: string }>()
     const navigate = useNavigate()
-    const gameName = localStorage.getItem(`game_${gameId} `) || 'Planning Session'
+    const gameName = localStorage.getItem(`game_${gameId}`) || 'Planning Session'
     const username = localStorage.getItem('currentUser')
     const [userId] = useState(() => {
         const stored = localStorage.getItem('userId')
@@ -21,7 +22,8 @@ function GamePage() {
         localStorage.setItem('userId', newId)
         return newId
     })
-    const { roomState, submitVote, resetVotes, revealVotes, joinRoom, isConnected, deleteRoom, leaveRoom } = useSocket()
+    const { roomState, isConnected } = useSocketState()
+    const { submitVote, resetVotes, revealVotes, joinRoom, deleteRoom, leaveRoom, updateTitle } = useSocketActions()
     const hasJoined = useRef(false)
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
 
@@ -62,37 +64,42 @@ function GamePage() {
         }
 
         return () => {
-            if (gameId && userId && hasJoined.current) {
-                leaveRoom(gameId, userId)
+            if (hasJoined.current) {
                 hasJoined.current = false
             }
         }
     }, [gameId, userId, username, joinRoom, isConnected, navigate, leaveRoom])
 
     const isAdmin = roomState?.participants.find(p => p.userId === userId)?.isAdmin
+
+    // Check if all connected participants have cast a vote
+    const connectedParticipants = roomState?.participants.filter(p => p.isConnected) || []
+    const allVoted = connectedParticipants.length > 0 && connectedParticipants.every(p => p.hasVoted)
+
     return (
         <div className="app-container">
             <div className="room-info-bar">
                 <div className="room-info-box">
-                    <div className="text-bold text-lg">{gameName}</div>
-                    <div className="text-sm text-dim">ID: {gameId}</div>
+                    <div className="text-bold text-2xl">{gameName}</div>
                 </div>
-                <nav className="nav-links">
-                    <button type="button" className="btn-outline">Invite</button>
-                </nav>
             </div>
 
             <main className="section game-page-main">
                 <div className="container">
                     <div className="game-grid-layout">
                         <div className="estimation-area">
-                            <div className="flex-baseline-between">
-                                <h2 className="section-title text-left text-2xl">Estimation</h2>
-                                <div className="text-xl text-semibold text-dim-extra">Round {roomState?.round || 1}</div>
-                            </div>
+                            <div className="text-xl text-semibold text-dim-extra mb-8">Round {roomState?.round || 1}</div>
+
+                            {!roomState?.votesVisible && (
+                                <RoundTitle
+                                    initialTitle={roomState?.title || ''}
+                                    isAdmin={!!isAdmin}
+                                    onUpdate={(title) => gameId && updateTitle(gameId, title)}
+                                />
+                            )}
 
                             {roomState?.votesVisible ? (
-                                <VoteChart participants={roomState.participants} />
+                                <VoteChart participants={roomState.participants} title={roomState.title} />
                             ) : (
                                 <div className="board-container">
                                     {VOTING_OPTIONS.map(option => (
@@ -107,10 +114,32 @@ function GamePage() {
                             )}
 
                             <div className="admin-controls mt-16 flex gap-4">
-                                <button type="button" className="btn-primary" onClick={() => revealVotes(gameId!)}>Show Cards</button>
-                                <button type="button" className="btn-outline" onClick={() => resetVotes(gameId!)}>Clear Board</button>
+                                {isAdmin && allVoted && !roomState?.votesVisible && (
+                                    <button
+                                        type="button"
+                                        className="btn-primary"
+                                        onClick={() => revealVotes(gameId!)}
+                                    >
+                                        Show Cards
+                                    </button>
+                                )}
+                                {isAdmin && roomState?.votesVisible && (
+                                    <button
+                                        type="button"
+                                        className="btn-outline"
+                                        onClick={() => resetVotes(gameId!)}
+                                    >
+                                        New Round
+                                    </button>
+                                )}
                                 {isAdmin && (
-                                    <button type="button" className="btn-outline btn-danger" onClick={() => setShowDeleteConfirmation(true)}>Delete Room</button>
+                                    <button
+                                        type="button"
+                                        className="btn-outline btn-danger"
+                                        onClick={() => setShowDeleteConfirmation(true)}
+                                    >
+                                        Delete Room
+                                    </button>
                                 )}
                             </div>
                         </div>
