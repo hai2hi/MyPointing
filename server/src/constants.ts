@@ -14,6 +14,8 @@ export const SOCKET_EVENTS = {
     LEAVE_ROOM: 'leaveRoom',
     UPDATE_TITLE: 'updateTitle',
     ERROR: 'error',
+    CLEAR_VOTES: 'clearVotes',
+    PASS_ADMIN: 'passAdmin',
 } as const;
 
 export const ROOM_DELETION_REASONS = {

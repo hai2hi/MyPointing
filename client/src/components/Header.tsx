@@ -96,7 +96,13 @@ const Header = React.memo(() => {
     const showRejoin = lastGameId && !location.pathname.includes('/game/')
 
     const handleInvite = () => {
-        const url = window.location.href
+        let url = window.location.href
+        if (import.meta.env.PROD && import.meta.env.VITE_CLIENT_URL) {
+            url = `${import.meta.env.VITE_CLIENT_URL}${location.pathname}${location.search}`
+        }
+
+        console.log(url);
+
         navigator.clipboard.writeText(url).then(() => {
             alert('Room URL copied to clipboard!')
         }).catch(err => {

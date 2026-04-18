@@ -94,6 +94,12 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     }, [checkConnection]);
 
+    const clearVotes = useCallback((roomId: string) => {
+        if (checkConnection()) {
+            socket.emit(SOCKET_EVENTS.CLEAR_VOTES, roomId);
+        }
+    }, [checkConnection]);
+
     const deleteRoom = useCallback((roomId: string) => {
         if (checkConnection()) {
             socket.emit(SOCKET_EVENTS.DELETE_ROOM, roomId);
@@ -118,6 +124,12 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     }, [checkConnection]);
 
+    const passAdmin = useCallback((roomId: string, newAdminId: string) => {
+        if (checkConnection()) {
+            socket.emit(SOCKET_EVENTS.PASS_ADMIN, roomId, newAdminId);
+        }
+    }, [checkConnection]);
+
     const stateValue = React.useMemo(() => ({
         roomState,
         isConnected
@@ -128,21 +140,25 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         submitVote,
         revealVotes,
         resetVotes,
+        clearVotes,
         deleteRoom,
         leaveRoom,
         updateTitle,
         sendTest,
-        checkConnection
+        checkConnection,
+        passAdmin
     }), [
         joinRoom,
         submitVote,
         revealVotes,
         resetVotes,
+        clearVotes,
         deleteRoom,
         leaveRoom,
         updateTitle,
         sendTest,
-        checkConnection
+        checkConnection,
+        passAdmin
     ]);
 
     return (

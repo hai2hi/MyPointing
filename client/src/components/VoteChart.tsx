@@ -29,14 +29,15 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
     }
 
     // Group votes
-    const voteCounts: Record<string, number> = {};
+    const voteGroups: Record<string, string[]> = {};
     votedParticipants.forEach(p => {
         const val = p.vote!.toString();
-        voteCounts[val] = (voteCounts[val] || 0) + 1;
+        if (!voteGroups[val]) voteGroups[val] = [];
+        voteGroups[val].push(p.displayName);
     });
 
     const totalVotes = votedParticipants.length;
-    const entries = Object.entries(voteCounts).sort((a, b) => {
+    const entries = Object.entries(voteGroups).sort((a, b) => {
         // Sort by value (numeric if possible)
         const valA = isNaN(Number(a[0])) ? Infinity : Number(a[0]);
         const valB = isNaN(Number(b[0])) ? Infinity : Number(b[0]);
@@ -62,7 +63,8 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
             <div className="flex-center gap-16 w-full chart-content-wrapper">
                 <div className="chart-svg-wrapper">
                     <svg viewBox="-1 -1 2 2" className="pie-chart-svg">
-                        {entries.map(([value, count], index) => {
+                        {entries.map(([value, names], index) => {
+                            const count = names.length;
                             const percent = count / totalVotes;
                             const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
 
@@ -70,11 +72,18 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
 
                             const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
                             const largeArcFlag = percent > 0.5 ? 1 : 0;
-                            const pathData = [
-                                `M ${startX} ${startY}`,
-                                `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
-                                `L 0 0`,
-                            ].join(' ');
+                            
+                            // If percent is 1, draw a full circle instead of standard arc path to avoid visual bugs
+                            let pathData;
+                            if (percent === 1) {
+                                pathData = `M 1 0 A 1 1 0 1 1 -1 0 A 1 1 0 1 1 1 0`;
+                            } else {
+                                pathData = [
+                                    `M ${startX} ${startY}`,
+                                    `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+                                    `L 0 0`,
+                                ].join(' ');
+                            }
 
                             return (
                                 <path
@@ -82,7 +91,9 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
                                     d={pathData}
                                     fill={COLORS[index % COLORS.length]}
                                     className="chart-slice"
-                                />
+                                >
+                                    <title>Voted by: {names.join(', ')}</title>
+                                </path>
                             );
                         })}
                     </svg>
@@ -93,21 +104,24 @@ const VoteChart: React.FC<VoteChartProps> = ({ participants, title }) => {
                 </div>
 
                 <div className="chart-legend">
-                    {entries.map(([value, count], index) => (
-                        <div key={value} className="legend-item">
-                            <div
-                                className="legend-color"
-                                style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                            />
-                            <div className="legend-info">
-                                <span className="legend-value">{value}</span>
-                                <span className="legend-count">{count} {count === 1 ? 'vote' : 'votes'}</span>
+                    {entries.map(([value, names], index) => {
+                        const count = names.length;
+                        return (
+                            <div key={value} className="legend-item">
+                                <div
+                                    className="legend-color"
+                                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                                />
+                                <div className="legend-info">
+                                    <span className="legend-value">{value}</span>
+                                    <span className="legend-count">{count} {count === 1 ? 'vote' : 'votes'}</span>
+                                </div>
+                                <div className="legend-percent">
+                                    {Math.round((count / totalVotes) * 100)}%
+                                </div>
                             </div>
-                            <div className="legend-percent">
-                                {Math.round((count / totalVotes) * 100)}%
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </div>

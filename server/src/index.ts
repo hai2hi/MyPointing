@@ -16,7 +16,9 @@ import {
     handleLeaveRoom,
     handleDisconnect,
     handleTest,
-    handleUpdateTitle
+    handleUpdateTitle,
+    handleClearVotes,
+    handlePassAdmin
 } from './handlers.js';
 import { DEFAULT_PORT, SOCKET_EVENTS } from './constants.js';
 
@@ -53,8 +55,10 @@ io.on(SOCKET_EVENTS.CONNECTION, (socket) => {
     });
 
     socket.on(SOCKET_EVENTS.RESET_VOTES, (roomId) => handleResetVotes(io, socket, roomId));
+    socket.on(SOCKET_EVENTS.CLEAR_VOTES, (roomId) => handleClearVotes(io, socket, roomId));
     socket.on(SOCKET_EVENTS.DELETE_ROOM, (roomId) => handleDeleteRoom(io, roomId, socket));
     socket.on(SOCKET_EVENTS.LEAVE_ROOM, (roomId, userId) => handleLeaveRoom(io, socket, roomId, userId));
+    socket.on(SOCKET_EVENTS.PASS_ADMIN, (roomId, newAdminId) => handlePassAdmin(io, socket, roomId, newAdminId));
     socket.on(SOCKET_EVENTS.DISCONNECT, () => handleDisconnect(io, socket));
 
     socket.on(SOCKET_EVENTS.TEST, () => {
