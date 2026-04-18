@@ -8,6 +8,7 @@ import { useSocketState, useSocketActions } from '../hooks/useSocket'
 import { VOTING_OPTIONS } from '../constants/voting'
 import VoteChart from '../components/VoteChart'
 import RoundTitle from '../components/RoundTitle'
+import GearDropdown from '../components/GearDropdown'
 import '../css/App.css'
 
 function GamePage() {
@@ -23,9 +24,10 @@ function GamePage() {
         return newId
     })
     const { roomState, isConnected } = useSocketState()
-    const { submitVote, resetVotes, revealVotes, joinRoom, deleteRoom, leaveRoom, updateTitle } = useSocketActions()
+    const { submitVote, resetVotes, revealVotes, clearVotes, joinRoom, deleteRoom, leaveRoom, updateTitle } = useSocketActions()
     const hasJoined = useRef(false)
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+    const [showResetConfirmation, setShowResetConfirmation] = useState(false)
 
     // Find current user's vote
     const currentUser = roomState?.participants.find(p => p.userId === userId)
@@ -133,13 +135,24 @@ function GamePage() {
                                     </button>
                                 )}
                                 {isAdmin && (
-                                    <button
-                                        type="button"
-                                        className="btn-outline btn-danger"
-                                        onClick={() => setShowDeleteConfirmation(true)}
-                                    >
-                                        Delete Room
-                                    </button>
+                                    <GearDropdown title="Admin Options">
+                                        {roomState?.votesVisible && (
+                                            <button
+                                                type="button"
+                                                className="dropdown-item"
+                                                onClick={() => setShowResetConfirmation(true)}
+                                            >
+                                                Reset Current Votes
+                                            </button>
+                                        )}
+                                        <button
+                                            type="button"
+                                            className="dropdown-item dropdown-item-danger"
+                                            onClick={() => setShowDeleteConfirmation(true)}
+                                        >
+                                            Delete Room
+                                        </button>
+                                    </GearDropdown>
                                 )}
                             </div>
                         </div>
@@ -185,6 +198,37 @@ function GamePage() {
                     }
                 >
                     <p>Are you sure you want to delete this room? This action cannot be undone and all participants will be disconnected.</p>
+                </Modal>
+            )}
+
+            {showResetConfirmation && (
+                <Modal
+                    isOpen={showResetConfirmation}
+                    title="Reset Current Votes?"
+                    onClose={() => setShowResetConfirmation(false)}
+                    actions={
+                        <div className="flex gap-4 w-full">
+                            <button
+                                type="button"
+                                className="btn-outline flex-1"
+                                onClick={() => setShowResetConfirmation(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="btn-primary flex-1"
+                                onClick={() => {
+                                    clearVotes(gameId!)
+                                    setShowResetConfirmation(false)
+                                }}
+                            >
+                                Reset Votes
+                            </button>
+                        </div>
+                    }
+                >
+                    <p>Are you sure you want to clear the votes for the current round and go back to voting?</p>
                 </Modal>
             )}
 

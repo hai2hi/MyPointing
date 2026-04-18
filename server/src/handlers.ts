@@ -267,6 +267,28 @@ export const handleResetVotes = (
     console.log(`Votes reset in room ${roomId}`);
 };
 
+export const handleClearVotes = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string
+) => {
+    const room = rooms[roomId];
+    if (!room) {
+        notifyIfRoomDeleted(socket, roomId);
+        console.log(`Room not found: ${roomId}`);
+        return;
+    }
+
+    room.votesVisible = false;
+    room.participants.forEach(p => {
+        p.vote = null;
+        p.hasVoted = false;
+    });
+
+    broadcastRoomState(io, roomId);
+    console.log(`Votes cleared in room ${roomId}`);
+};
+
 export const handleDeleteRoom = (
     io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
     roomId: string,
@@ -290,6 +312,36 @@ export const handleDeleteRoom = (
 
     console.log(`Room ${roomId} is being deleted by admin ${userId}`);
     deleteRoom(io, roomId, ROOM_DELETION_REASONS.MANUAL);
+};
+
+export const handlePassAdmin = (
+    io: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>,
+    roomId: string,
+    newAdminId: string
+) => {
+    const room = rooms[roomId];
+    if (!room) return;
+
+    const currentUserId = socket.data.userId;
+    const currentAdmin = room.participants.find(p => p.userId === currentUserId);
+    const newAdmin = room.participants.find(p => p.userId === newAdminId);
+
+    if (!currentAdmin || !currentAdmin.isAdmin) {
+        socket.emit(SOCKET_EVENTS.ERROR, 'Only the current admin can pass the admin role.');
+        return;
+    }
+
+    if (!newAdmin) {
+        socket.emit(SOCKET_EVENTS.ERROR, 'The selected user is not in the room.');
+        return;
+    }
+
+    currentAdmin.isAdmin = false;
+    newAdmin.isAdmin = true;
+
+    broadcastRoomState(io, roomId);
+    console.log(`Admin role in room ${roomId} passed from ${currentUserId} to ${newAdminId}`);
 };
 
 export const handleDisconnect = (

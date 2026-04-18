@@ -9,7 +9,9 @@ export const SOCKET_EVENTS = {
     DELETE_ROOM: 'deleteRoom',
     ROOM_DELETED: 'roomDeleted',
     LEAVE_ROOM: 'leaveRoom',
-    UPDATE_TITLE: 'updateTitle'
+    UPDATE_TITLE: 'updateTitle',
+    CLEAR_VOTES: 'clearVotes',
+    PASS_ADMIN: 'passAdmin'
 } as const;
 
 export const ROOM_DELETION_REASONS = {

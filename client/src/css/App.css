@@ -685,3 +685,68 @@
     padding: 2rem 1.5rem;
   }
 }
+
+/* --- Dropdown Styles --- */
+.admin-dropdown-container {
+  position: relative;
+}
+
+.admin-gear-btn {
+  padding: 0.9rem; /* Adjust padding to precisely match the height of New Round button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-dropdown-spacer {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding-left: 0.5rem;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease-out, visibility 0s linear 0.25s;
+}
+
+.admin-dropdown-spacer.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease-out, visibility 0s linear 0s;
+}
+
+.admin-dropdown-menu {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05); /* slightly lighter than bg-secondary */
+}
+
+.dropdown-item-danger {
+  color: #ff4d4d;
+}

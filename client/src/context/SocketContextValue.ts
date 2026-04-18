@@ -11,11 +11,13 @@ export interface SocketActionsContextType {
     submitVote: (roomId: string, userId: string, vote: any) => void;
     revealVotes: (roomId: string) => void;
     resetVotes: (roomId: string) => void;
+    clearVotes: (roomId: string) => void;
     deleteRoom: (roomId: string) => void;
     leaveRoom: (roomId: string, userId: string) => void;
     updateTitle: (roomId: string, title: string) => void;
     sendTest: () => void;
     checkConnection: () => boolean;
+    passAdmin: (roomId: string, newAdminId: string) => void;
 }
 
 export const SocketStateContext = createContext<SocketStateContextType | undefined>(undefined);

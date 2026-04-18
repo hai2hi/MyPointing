@@ -44,4 +44,6 @@ export interface ClientToServerEvents {
     leaveRoom: (roomId: string, userId: string) => void;
     updateTitle: (roomId: string, title: string) => void;
     test: () => void;
+    clearVotes: (roomId: string) => void;
+    passAdmin: (roomId: string, newAdminId: string) => void;
 }
