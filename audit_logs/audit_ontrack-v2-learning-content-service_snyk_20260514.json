@@ -1,0 +1,37 @@
+[
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-learning-content-service\\Kaplan.Ontrack.LearningContentService"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-learning-content-service\\Kaplan.Ontrack.LearningContentService.Contract"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-learning-content-service\\Kaplan.Ontrack.LearningContentService.Tests"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.MessageBus"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.Logging"
+  },
+  {
+    "ok": false,
+    "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+    "path": "D:\\Kaplan\\ontrack-v2-account-service\\Kaplan.Ontrack.AccountService.Contract"
+  }
+]

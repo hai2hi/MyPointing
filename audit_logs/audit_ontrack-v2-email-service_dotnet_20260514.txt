@@ -1,0 +1,114 @@
+Running dotnet restore for D:\Kaplan\ontrack-v2-email-service\Kaplan.Ontrack.EmailService.sln 
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+----------------------------------------------------------------- 
+-- running "outdated package check" 
+----------------------------------------------------------------- 
+Checking outdated packages for D:\Kaplan\ontrack-v2-email-service\Kaplan.Ontrack.EmailService.sln 
+
+The following sources were used:
+   https://api.nuget.org/v3/index.json
+
+Project `Kaplan.Ontrack.EmailService` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package                Requested   Resolved   Latest   
+   > AWSSDK.SimpleEmailV2           4.0.12.1    4.0.12.1   4.0.12.14
+   > MimeKit                        4.15.1      4.15.1     4.16.0   
+   > Swashbuckle.AspNetCore         9.0.6       9.0.6      10.1.7   
+   > System.Text.Encodings.Web      9.0.10      9.0.10     10.0.8   
+
+Project `Kaplan.Ontrack.EmailService.Tests` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package             Requested   Resolved   Latest
+   > coverlet.msbuild            8.0.0       8.0.0      10.0.0
+   > Microsoft.CodeCoverage      18.0.1      18.0.1     18.5.1
+   > Microsoft.NET.Test.Sdk      17.14.1     17.14.1    18.5.1
+   > nunit                       4.5.1       4.5.1      4.6.0 
+   > NUnit3TestAdapter           6.1.0       6.1.0      6.2.0 
+   > ReportGenerator             5.5.3       5.5.3      5.5.10
+
+Project `Kaplan.Ontrack.Framework` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package                                      Requested   Resolved   Latest  
+   > AWSSDK.Core                                          4.0.3.16    4.0.3.16   4.0.6.2 
+   > AWSSDK.Extensions.NETCore.Setup                      4.0.3.24    4.0.3.24   4.0.3.38
+   > AWSSDK.S3                                            4.0.18.8    4.0.18.8   4.0.23.1
+   > AWSSDK.SecretsManager                                4.0.4.8     4.0.4.8    4.0.4.21
+   > AWSSDK.SimpleNotificationService                     4.0.2.18    4.0.2.18   4.0.2.31
+   > EnyimMemcachedCore                                   3.4.6       3.4.6      3.5.0   
+   > Microsoft.AspNetCore.Authentication.JwtBearer        8.0.19      8.0.19     10.0.8  
+   > Microsoft.AspNetCore.HeaderPropagation               8.0.19      8.0.19     10.0.8  
+   > Microsoft.EntityFrameworkCore                        8.0.19      8.0.19     10.0.8  
+   > Microsoft.Extensions.Caching.Memory                  9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Configuration                   9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Configuration.Abstractions      9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Configuration.Binder            9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Http                            9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Http.Polly                      9.0.10      9.0.10     10.0.8  
+   > Microsoft.Extensions.Logging                         9.0.10      9.0.10     10.0.8  
+   > Microsoft.IdentityModel.JsonWebTokens                8.16.0      8.16.0     8.18.0  
+   > Microsoft.IdentityModel.Protocols.OpenIdConnect      8.16.0      8.16.0     8.18.0  
+   > NPOI                                                 2.7.6       2.7.6      2.8.0   
+   > SixLabors.ImageSharp                                 3.1.12      3.1.12     4.0.0   
+   > StackExchange.Redis                                  2.11.8      2.11.8     2.13.1  
+   > System.Drawing.Common                                9.0.10      9.0.10     10.0.8  
+   > System.Formats.Asn1                                  9.0.15      9.0.15     10.0.8  
+   > System.IdentityModel.Tokens.Jwt                      8.16.0      8.16.0     8.18.0  
+   > System.Security.Cryptography.Pkcs                    9.0.15      9.0.15     10.0.8  
+   > System.Security.Cryptography.Xml                     9.0.15      9.0.15     10.0.8  
+   > System.Text.Encodings.Web                            9.0.10      9.0.10     10.0.8  
+   > System.Text.Json                                     9.0.10      9.0.10     10.0.8  
+
+Project `Kaplan.Ontrack.Framework.DynamoDB` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package                               Requested   Resolved   Latest  
+   > AWSSDK.DynamoDBv2                             4.0.15.1    4.0.15.1   4.0.18.2
+   > Microsoft.Extensions.DependencyInjection      9.0.10      9.0.10     10.0.8  
+
+Project `Kaplan.Ontrack.Framework.Logging` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package      Requested   Resolved   Latest 
+   > AWSSDK.Core          4.0.3.16    4.0.3.16   4.0.6.2
+
+Project `Kaplan.Ontrack.Framework.MessageBus` has the following updates to its packages
+   [net8.0]: 
+   Top-level Package              Requested   Resolved   Latest  
+   > Amazon.Lambda.Core           2.8.1       2.8.1      3.0.0   
+   > Amazon.Lambda.SQSEvents      2.2.1       2.2.1      3.0.0   
+   > AWSSDK.Core                  4.0.3.16    4.0.3.16   4.0.6.2 
+   > AWSSDK.SQS                   4.0.2.16    4.0.2.16   4.0.2.29
+
+The given project `Kaplan.Ontrack.EmailService.Contract` has no updates given the current sources.
+The given project `Kaplan.Ontrack.NotificationService.Contract` has no updates given the current sources.
+----------------------------------------------------------------- 
+-- running "deprecated package check" 
+----------------------------------------------------------------- 
+Checking deprecated packages for D:\Kaplan\ontrack-v2-email-service\Kaplan.Ontrack.EmailService.sln 
+
+The following sources were used:
+   https://api.nuget.org/v3/index.json
+
+The given project `Kaplan.Ontrack.EmailService` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.EmailService.Tests` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.Framework` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.DynamoDB` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.Logging` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.MessageBus` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.EmailService.Contract` has no deprecated packages given the current sources.
+The given project `Kaplan.Ontrack.NotificationService.Contract` has no deprecated packages given the current sources.
+----------------------------------------------------------------- 
+-- running "vulnerable package check" 
+----------------------------------------------------------------- 
+Checking vulnerable packages for D:\Kaplan\ontrack-v2-email-service\Kaplan.Ontrack.EmailService.sln 
+
+The following sources were used:
+   https://api.nuget.org/v3/index.json
+
+The given project `Kaplan.Ontrack.EmailService` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.EmailService.Tests` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.Framework` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.DynamoDB` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.Logging` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.Framework.MessageBus` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.EmailService.Contract` has no vulnerable packages given the current sources.
+The given project `Kaplan.Ontrack.NotificationService.Contract` has no vulnerable packages given the current sources.

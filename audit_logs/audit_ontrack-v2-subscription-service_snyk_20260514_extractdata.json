@@ -1,0 +1,44 @@
+[
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.Logging",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.MessageBus",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-subscription-service\\Kaplan.Ontrack.SubscriptionService",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-subscription-service\\Kaplan.Ontrack.SubscriptionService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-subscription-service\\Kaplan.Ontrack.SubscriptionService.Tests",
+        "summary": "",
+        "vulnerabilities": []
+    }
+]

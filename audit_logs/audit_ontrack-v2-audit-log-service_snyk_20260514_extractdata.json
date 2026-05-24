@@ -1,0 +1,51 @@
+[
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-audit-log-service\\Kaplan.Ontrack.AuditLogService",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-audit-log-service\\Kaplan.Ontrack.AuditLogService.Tests",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.Logging",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.MessageBus",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.DynamoDB",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-audit-log-service\\Kaplan.Ontrack.AuditLogService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    }
+]

@@ -1,0 +1,346 @@
+[
+    {
+        "project": "Kaplan.Ontrack.CMSService",
+        "vulnerabilities": [
+            {
+                "packageName": "Microsoft.Extensions.Configuration.Abstractions",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Configuration.Binder",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Http.Polly",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Swashbuckle.AspNetCore",
+                "requested": "9.0.6",
+                "resolved": "9.0.6",
+                "fixedIn": "10.1.7",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Text.Encodings.Web",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            }
+        ],
+        "summary": "5 vulnerabilities found",
+        "path": "D:\\Kaplan\\\\audit_logs\\audit_ontrack-v2-cms-service_dotnet_20260514.txt",
+        "file": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.sln"
+    },
+    {
+        "project": "Kaplan.Ontrack.CMSService.Tests",
+        "vulnerabilities": [
+            {
+                "packageName": "coverlet.msbuild",
+                "requested": "8.0.0",
+                "resolved": "8.0.0",
+                "fixedIn": "10.0.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.CodeCoverage",
+                "requested": "18.0.1",
+                "resolved": "18.0.1",
+                "fixedIn": "18.5.1",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.EntityFrameworkCore.InMemory",
+                "requested": "8.0.19",
+                "resolved": "8.0.19",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.NET.Test.Sdk",
+                "requested": "17.14.1",
+                "resolved": "17.14.1",
+                "fixedIn": "18.5.1",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "nunit",
+                "requested": "4.5.1",
+                "resolved": "4.5.1",
+                "fixedIn": "4.6.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "NUnit3TestAdapter",
+                "requested": "6.1.0",
+                "resolved": "6.1.0",
+                "fixedIn": "6.2.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "ReportGenerator",
+                "requested": "5.5.3",
+                "resolved": "5.5.3",
+                "fixedIn": "5.5.10",
+                "id": "",
+                "severity": "updated"
+            }
+        ],
+        "summary": "7 vulnerabilities found",
+        "path": "D:\\Kaplan\\\\audit_logs\\audit_ontrack-v2-cms-service_dotnet_20260514.txt",
+        "file": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.sln"
+    },
+    {
+        "project": "Kaplan.Ontrack.Framework",
+        "vulnerabilities": [
+            {
+                "packageName": "EnyimMemcachedCore",
+                "requested": "3.4.6",
+                "resolved": "3.4.6",
+                "fixedIn": "3.5.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.AspNetCore.Authentication.JwtBearer",
+                "requested": "8.0.19",
+                "resolved": "8.0.19",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.AspNetCore.HeaderPropagation",
+                "requested": "8.0.19",
+                "resolved": "8.0.19",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.EntityFrameworkCore",
+                "requested": "8.0.19",
+                "resolved": "8.0.19",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Caching.Memory",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Configuration",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Configuration.Abstractions",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Configuration.Binder",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Http",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Http.Polly",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.Extensions.Logging",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.IdentityModel.JsonWebTokens",
+                "requested": "8.16.0",
+                "resolved": "8.16.0",
+                "fixedIn": "8.18.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+                "requested": "8.16.0",
+                "resolved": "8.16.0",
+                "fixedIn": "8.18.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "NPOI",
+                "requested": "2.7.6",
+                "resolved": "2.7.6",
+                "fixedIn": "2.8.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "SixLabors.ImageSharp",
+                "requested": "3.1.12",
+                "resolved": "3.1.12",
+                "fixedIn": "4.0.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "StackExchange.Redis",
+                "requested": "2.11.8",
+                "resolved": "2.11.8",
+                "fixedIn": "2.13.1",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Drawing.Common",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Formats.Asn1",
+                "requested": "9.0.15",
+                "resolved": "9.0.15",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.IdentityModel.Tokens.Jwt",
+                "requested": "8.16.0",
+                "resolved": "8.16.0",
+                "fixedIn": "8.18.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Security.Cryptography.Pkcs",
+                "requested": "9.0.15",
+                "resolved": "9.0.15",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Security.Cryptography.Xml",
+                "requested": "9.0.15",
+                "resolved": "9.0.15",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Text.Encodings.Web",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "System.Text.Json",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            }
+        ],
+        "summary": "23 vulnerabilities found",
+        "path": "D:\\Kaplan\\\\audit_logs\\audit_ontrack-v2-cms-service_dotnet_20260514.txt",
+        "file": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.sln"
+    },
+    {
+        "project": "Kaplan.Ontrack.Framework.DynamoDB",
+        "vulnerabilities": [
+            {
+                "packageName": "Microsoft.Extensions.DependencyInjection",
+                "requested": "9.0.10",
+                "resolved": "9.0.10",
+                "fixedIn": "10.0.8",
+                "id": "",
+                "severity": "updated"
+            }
+        ],
+        "summary": "1 vulnerabilities found",
+        "path": "D:\\Kaplan\\\\audit_logs\\audit_ontrack-v2-cms-service_dotnet_20260514.txt",
+        "file": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.sln"
+    },
+    {
+        "project": "Kaplan.Ontrack.Framework.MessageBus",
+        "vulnerabilities": [
+            {
+                "packageName": "Amazon.Lambda.Core",
+                "requested": "2.8.1",
+                "resolved": "2.8.1",
+                "fixedIn": "3.0.0",
+                "id": "",
+                "severity": "updated"
+            },
+            {
+                "packageName": "Amazon.Lambda.SQSEvents",
+                "requested": "2.2.1",
+                "resolved": "2.2.1",
+                "fixedIn": "3.0.0",
+                "id": "",
+                "severity": "updated"
+            }
+        ],
+        "summary": "2 vulnerabilities found",
+        "path": "D:\\Kaplan\\\\audit_logs\\audit_ontrack-v2-cms-service_dotnet_20260514.txt",
+        "file": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.sln"
+    }
+]

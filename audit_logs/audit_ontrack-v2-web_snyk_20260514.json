@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "error": "`snyk` requires an authenticated account. Please run `snyk auth` and try again.",
+  "path": "D:\\Kaplan"
+}

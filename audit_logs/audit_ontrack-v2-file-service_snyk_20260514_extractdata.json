@@ -1,0 +1,37 @@
+[
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-file-service\\Kaplan.Ontrack.FileService",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.Logging",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-file-service\\Kaplan.Ontrack.FileService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-file-service\\Kaplan.Ontrack.FileService.Tests",
+        "summary": "",
+        "vulnerabilities": []
+    }
+]

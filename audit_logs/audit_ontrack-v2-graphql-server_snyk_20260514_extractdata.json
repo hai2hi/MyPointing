@@ -1,0 +1,121 @@
+[
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-graphql-server\\Kaplan.Ontrack.GraphQLServer",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.Logging",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-account-service\\Kaplan.Ontrack.AccountService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-graphql-server\\Kaplan.Ontrack.GraphQLServer.Tests",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-pdp-service\\Kaplan.Ontrack.PDPService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-subscription-service\\Kaplan.Ontrack.SubscriptionService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-bulk-user-service\\Kaplan.Ontrack.BulkUserService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-learning-content-service\\Kaplan.Ontrack.LearningContentService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-notification-service\\Kaplan.Ontrack.NotificationService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-file-service\\Kaplan.Ontrack.FileService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-framework\\Kaplan.Ontrack.Framework.DynamoDB",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-supplementary-learning-service\\Kaplan.Ontrack.SupplementaryLearningService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-reporting-service\\Kaplan.Ontrack.ReportingService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-audit-log-service\\Kaplan.Ontrack.AuditLogService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-completion-service\\Kaplan.Ontrack.CompletionService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    },
+    {
+        "project": "",
+        "file": "",
+        "path": "D:\\Kaplan\\ontrack-v2-cms-service\\Kaplan.Ontrack.CMSService.Contract",
+        "summary": "",
+        "vulnerabilities": []
+    }
+]
